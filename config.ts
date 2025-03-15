@@ -12,8 +12,8 @@ export default {
   SEO_keywords: "Kemiao,Kemiao's blog,克喵爱吃卤面,克喵的博客", // keywords meta header
   MSClarityId: "qohavwdio1", // Microsoft的Clarity统计，https://clarity.microsoft.com/
   CloudflareAnalyze: "", // cloudflare的统计，https://developers.cloudflare.com/analytics/web-analytics
-  CommentRepoId: "", // https://giscus.app/zh-CN
-  CommentDiscussionCategoryId: "", // https://giscus.app/zh-CN
+  CommentRepoId: "R_kgDOOIqpEA", // https://giscus.app/zh-CN
+  CommentDiscussionCategoryId: "DIC_kwDOOIqpEM4CoDiw", // https://giscus.app/zh-CN
 
   MongoDb: { // 浏览量统计，请先设置 https://vercel.com/integrations/mongodbatlas
     database: "nuxt3-blog",
