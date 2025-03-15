@@ -15,7 +15,7 @@ export default {
   CommentRepoId: "R_kgDOOIqpEA", // https://giscus.app/zh-CN
   CommentDiscussionCategoryId: "DIC_kwDOOIqpEM4CoDiw", // https://giscus.app/zh-CN
 
-  MongoDb: { // 浏览量统计，请先设置 https://vercel.com/integrations/mongodbatlas
+  MongoDb: {
     database: "nuxt3-blog",
     collection: "visitors",
     initialVisitors: 1, // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
