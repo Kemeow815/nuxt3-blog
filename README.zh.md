@@ -6,6 +6,9 @@
 
 [![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v3-%2300DC82?logo=nuxt.js)
 
+
+[English Readme](/README.en.md) | 中文说明
+
 **🚀已通过[NitroJS](https://nitro.unjs.io/)多平台部署（NitroJS是Nuxt3的[官方引擎](https://nuxt.com/docs/guide/concepts/server-engine)）**
 > Vercel:[https://blog.yunyuyuan.net](https://blog.yunyuyuan.net)
 > 
@@ -15,8 +18,6 @@
 >
 **🚀self hosted部署（参考[我的文章](https://blog.yunyuyuan.net/articles/8346)）**
 > Drone:[https://blog-drone-cf.yunyuyuan.net](https://blog-drone-cf.yunyuyuan.net)，这里的`cf`意思是使用cloudflare做内网穿透
-
-[English Readme](/README.md) | 中文说明
 
 # 博客特性
 * 💻 **5分钟完成搭建**。快速搭建，不用写一行代码。
@@ -31,21 +32,14 @@
       <img height="300px" src="https://s2.loli.net/2023/03/09/9UQurkTGaOSY3j4.png"/>
 
 # 教我搭建
+
+## 详细搭建教程请参考 [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki)
+
+博客原理示例：
 <center>
 <img width="600px" src="https://s2.loli.net/2024/03/10/ih2KsmBDISAWN3U.png"/>
 </center>
 
-1. Fork 这个项目。
-2. 在 `config.ts` 中将 `githubName`更改为您当前的 Github 账户。如果您的存储库名称不是 **nuxt3-blog**，也请修改 `githubRepo`。
-3. 在 [Nitro 支持的平台](https://nitro.unjs.io/deploy) 上部署。
-4. 前往 [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new)，选择 **repo** 范围，然后点击 `Generate`。
-5. 前往 https://your-blog-domain/manage，输入您的 github 令牌。
-6. 享受创作的乐趣。
-
-#### 额外事项
-* 若要使用浏览量统计功能，参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1
-* 若要使用评论功能，则需要为Github安装[giscus](https://github.com/apps/giscus)，并开启[discussion](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository)，然后填写`config.ts`中的`CommentRepoId`和`CommentDiscussionCategoryId`  
-  参考giscus.app，[填写](https://giscus.app/zh-CN#:~:text=%E4%BB%93%E5%BA%93%EF%BC%9A,%E8%BF%9E%E6%8E%A5%E5%88%B0%E6%AD%A4%E4%BB%93%E5%BA%93%E3%80%82) **你的仓库** 的地址后，复制`data-repo-id`和`data-category-id`，分别对应`CommentRepoId`和`CommentDiscussionCategoryId`，位置在[data-repo-id和data-category-id](https://giscus.app/zh-CN#:~:text=%E5%9C%A8%E4%BD%A0%E6%83%B3%E8%AE%A9%E8%AF%84%E8%AE%BA%E5%87%BA%E7%8E%B0%E7%9A%84%E4%BD%8D%E7%BD%AE%E6%B7%BB%E5%8A%A0%E4%BB%A5%E4%B8%8B%20%3Cscript%3E%20%E6%A0%87%E7%AD%BE%E3%80%82%E4%BD%86%E5%A6%82%E6%9E%9C%E5%B7%B2%E7%BB%8F%E5%AD%98%E5%9C%A8%E5%B8%A6%E6%9C%89%20giscus%20%E7%B1%BB%E7%9A%84%E5%85%83%E7%B4%A0%EF%BC%8C%E5%88%99%E8%AF%84%E8%AE%BA%E4%BC%9A%E8%A2%AB%E6%94%BE%E5%9C%A8%E9%82%A3%E9%87%8C%E3%80%82)
 
 # 待开发
 #### 特性
