@@ -6,6 +6,8 @@
 
 [![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v3-%2300DC82?logo=nuxt.js)
 
+English Readme | [中文说明](/README.md)
+
 **🚀Deployed on multiple platforms via [NitroJS](https://nitro.unjs.io/) (the [official engine](https://nuxt.com/docs/guide/concepts/server-engine) for Nuxt3)**
 > Vercel: [https://blog.yunyuyuan.net](https://blog.yunyuyuan.net)
 > 
@@ -16,7 +18,6 @@
 **🚀Self-hosted deployment (refer to [my article](https://blog.yunyuyuan.net/articles/8346))**
 > Drone: [https://blog-drone-cf.yunyuyuan.net](https://blog-drone-cf.yunyuyuan.net), where `cf` means using Cloudflare for intranet penetration
 
-English Readme | [中文说明](/README.zh.md)
 
 # Blog Features
 * 💻 **5-minute setup**. Quick deployment without writing a single line of code.
@@ -31,21 +32,13 @@ English Readme | [中文说明](/README.zh.md)
       <img height="300px" src="https://s2.loli.net/2023/03/09/9UQurkTGaOSY3j4.png"/>
 
 # Setup Guide
+
+## For detailed setup tutorial, please refer to the [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki)
+
+Blog principle example:
 <center>
 <img width="600px" src="https://s2.loli.net/2024/03/10/ih2KsmBDISAWN3U.png"/>
 </center>
-
-1. Fork this project.
-2. Change `githubName` in `config.ts` to your current Github account. If your repository name is not **nuxt3-blog**, also modify `githubRepo`.
-3. Deploy on any [Nitro-supported platform](https://nitro.unjs.io/deploy).
-4. Go to [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new), select the **repo** scope, and click `Generate`.
-5. Visit https://your-blog-domain/manage and enter your GitHub token.
-6. Enjoy creating content.
-
-#### Additional Steps
-* To use the page view statistics feature, see https://github.com/yunyuyuan/nuxt3-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1
-* To use the comment feature, install [giscus](https://github.com/apps/giscus) for GitHub, enable [discussions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository), and fill in `CommentRepoId` and `CommentDiscussionCategoryId` in `config.ts`  
-  Refer to giscus.app, [enter](https://giscus.app/en) **your repository** address, then copy `data-repo-id` and `data-category-id`, which correspond to `CommentRepoId` and `CommentDiscussionCategoryId` respectively
 
 # To-Do List
 #### Features
