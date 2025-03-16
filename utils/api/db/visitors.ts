@@ -1,65 +1,47 @@
-import config from "../../../config";
+import axios from "axios";
 import type { HeaderTabUrl } from "../../common/types";
+import config from "~/config";
 
-const request = async (path: string, data: any) => {
-  if (!process.env.MONGODB_PWD || !process.env.MONGODB_USER) {
-    throw new Error("Need Mongodb Atlas Authentication");
+const request = async (sql: string, params: string[]) => {
+  const res = await axios.post(`https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_D1_ACCOUNT_ID!}/d1/database/${process.env.CLOUDFLARE_D1_DATABASE_ID}/raw`,
+    { sql, params },
+    {
+      headers: {
+        "Authorization": `Bearer ${process.env.CLOUDFLARE_D1_TOKEN!}`,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+  if (res.status !== 200) {
+    throw res.statusText;
   }
-
-  const url = process.env.MONGODB_ENDPOINT + path;
-  const requestData = {
-    ...data,
-    dataSource: process.env.MONGODB_DATA_SOURCE,
-    database: config.MongoDb.database,
-    collection: config.MongoDb.collection
-  };
-
-  const res = await $fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "email": process.env.MONGODB_USER,
-      "password": process.env.MONGODB_PWD
-    },
-    body: requestData
-  });
-  return res as any;
+  const result = res.data.result[0];
+  if (!result.success) {
+    throw "sql error";
+  }
+  return result.results;
 };
 
 export async function getVisitors(type: HeaderTabUrl) {
-  const res = await request("/action/find", {
-    filter: {
-      ntype: type
-    },
-    projection: { _id: 0, nid: 1, nvisitors: 1 }
-  });
-  return res.documents;
+  const res = await request("SELECT * FROM visitors WHERE ntype = ?;", [type]);
+  return res?.rows;
 }
 
 export async function increaseVisitors({ id, type, inc }: { id: number; type: HeaderTabUrl; inc?: boolean }) {
-  const preset = {
-    nid: id,
-    ntype: type
-  };
-  const incN = inc ? 1 : 0;
-  const res = await request("/action/updateOne", {
-    filter: preset,
-    update: {
-      $inc: {
-        nvisitors: incN
-      }
-    }
-  });
-  if (!res.modifiedCount) {
-    await request("/action/insertOne", {
-      document: {
-        ...preset,
-        nvisitors: config.MongoDb.initialVisitors
-      }
-    });
-    return config.MongoDb.initialVisitors;
+  const updateRes = await request(
+    `UPDATE visitors SET nvisitors = ${inc ? "nvisitors + 1" : "nvisitors"} WHERE nid = ? AND ntype = ? RETURNING nvisitors;`,
+    [id.toString(), type]
+  );
+  if (!updateRes) {
+    return null;
   }
-  return (await request("/action/findOne", {
-    filter: preset
-  })).document.nvisitors;
+  if (!updateRes.rows?.length) {
+    const insertRes = await request(
+      "INSERT INTO visitors (nid, ntype, nvisitors) VALUES (?, ?, ?) RETURNING nvisitors;",
+      [id.toString(), type, config.database.initialVisitors.toString()]
+    );
+    return insertRes?.rows?.[0]?.[0];
+  } else {
+    return updateRes.rows[0]?.[0];
+  }
 }

@@ -145,7 +145,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: isDev ? allPlugins : buildPlugins,
     define: {
-      __NB_MONGODB_ENABLED__: !!import.meta.env.MONGODB_URI || !!import.meta.env.MONGODB_USER,
+      __NB_DATABASE_ENABLED__: !!import.meta.env.CLOUDFLARE_D1_TOKEN && !!import.meta.env.CLOUDFLARE_D1_ACCOUNT_ID && !!import.meta.env.CLOUDFLARE_D1_DATABASE_ID,
       __NB_CMTREPOID__: JSON.stringify(config.CommentRepoId || import.meta.env.CommentRepoId),
       __NB_CMTREPOCATEID__: JSON.stringify(config.CommentDiscussionCategoryId || import.meta.env.CommentDiscussionCategoryId),
       __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
@@ -183,14 +183,6 @@ export default defineNuxtConfig({
         (config.build?.rollupOptions?.output as any).manualChunks = {
           // markdown: ["highlight.js", "katex", "marked"]
         };
-      }
-    },
-    "nitro:build:before"(nitro) {
-      const apiPath = path.join(__dirname, "utils", "api");
-      if (["node-server"].includes(nitro.options.preset) && !!import.meta.env.MONGODB_URI) {
-        for (const file of fs.readdirSync(path.join(apiPath, "db-tcp"))) {
-          fs.renameSync(path.join(apiPath, "db-tcp", file), path.join(apiPath, "db", file));
-        }
       }
     },
     "nitro:build:public-assets"(nitro) {
