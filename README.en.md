@@ -123,4 +123,8 @@ Blog principle example:
 # Other
 * Technical support/discussion QQ group: 745105612
 * Email: me@yunyuyuan.net
+<<<<<<< HEAD
 * Discord: https://discord.gg/HtSehSMYXa
+=======
+* Discord: https://discord.gg/HtSehSMYXa
+>>>>>>> upstream/master
