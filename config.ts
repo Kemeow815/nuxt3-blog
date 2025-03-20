@@ -12,13 +12,8 @@ export default {
   SEO_keywords: "Kemiao,Kemiao's blog,克喵爱吃卤面,克喵的博客", // keywords meta header
   MSClarityId: "qohavwdio1", // Microsoft的Clarity统计，https://clarity.microsoft.com/
   CloudflareAnalyze: "", // cloudflare的统计，https://developers.cloudflare.com/analytics/web-analytics
-<<<<<<< HEAD
   CommentRepoId: "R_kgDOOIqpEA", // 评论系统，参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.3-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F
   CommentDiscussionCategoryId: "DIC_kwDOOIqpEM4CoDiw", // // 评论系统
-=======
-  CommentRepoId: "", // 评论系统，参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.3-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F
-  CommentDiscussionCategoryId: "", // 评论系统
->>>>>>> upstream/master
 
   database: { // 参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1
     initialVisitors: 1, // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
