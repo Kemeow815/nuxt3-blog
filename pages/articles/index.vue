@@ -72,33 +72,29 @@ const toggleTags = (tag: string) => {
         v-for="item in filteredList"
         v-show="item._show"
         :key="item.id"
-        class="overflow-hidden rounded-xl bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:bg-dark-800"
+        class="group overflow-hidden rounded-xl bg-white shadow-sm transition duration-300 hover:translate-y-[-2px] hover:shadow-md dark:bg-dark-800"
       >
-        <nuxt-link
+        <NuxtLink
           :to="'/articles/' + String(item.id)"
           no-prefetch
-          class="group block p-6"
+          class="relative block p-6"
         >
           <div class="flex items-start justify-between">
             <h3 class="text-lg font-medium text-dark-900 transition group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
               {{ item.title }}
             </h3>
             <span
-              class="ml-4 whitespace-nowrap text-sm text-dark-500 dark:text-dark-400"
+              class="ml-4 whitespace-nowrap text-sm text-dark-500 dark:text-dark-400 max-md:absolute max-md:bottom-6 max-md:right-6"
               :title="formatTime(item.time)"
             >
               {{ formatTime(item.time, "date") }}
             </span>
           </div>
           <div class="mt-4 flex items-center space-x-4 text-sm text-dark-500 dark:text-dark-400">
-            <div class="flex items-center gap-1">
-              <Words :len="item.len" />
-            </div>
-            <div class="flex items-center">
-              <Visitors :visitors="item._visitors" />
-            </div>
+            <Words :len="item.len" />
+            <Visitors :visitors="item._visitors" />
           </div>
-        </nuxt-link>
+        </NuxtLink>
       </article>
     </div>
     <div

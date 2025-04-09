@@ -1,11 +1,12 @@
 import axios from "axios";
+import { encode } from "js-base64";
 import { formatTime } from "../format-time";
 import { translate } from "../i18n";
 import { notify } from "../notify";
 import { getCurrentTab } from "../utils";
 import { createCommitModal } from ".";
 import config from "~/config";
-import type { CommonItem } from "~/utils/common/types";
+import type { CommitParams, CommonItem } from "~/utils/common/types";
 
 async function post(data: string, token_?: string) {
   const token = token_ || useGithubToken().value;
@@ -24,7 +25,7 @@ async function post(data: string, token_?: string) {
 }
 
 function encodeB64(str: string) {
-  return btoa(unescape(encodeURIComponent(str)));
+  return encode(str);
 }
 
 /** @description 是否管理员 */
@@ -74,8 +75,7 @@ export async function isAuthor(token: string): Promise<boolean> {
  */
 export async function createCommit(
   commit = "",
-  additions: { path: string; content: string }[] = [],
-  deletions: { path: string }[] = []
+  { additions, deletions }: CommitParams
 ): Promise<boolean> {
   const correctSha = useRemoteLatestSha().value;
   if (__NB_BUILDTIME_VITESTING__) {
@@ -87,14 +87,14 @@ export async function createCommit(
   }
   let add = "";
   let del = "";
-  if (additions.length) {
+  if (additions?.length) {
     add = "additions: [";
     additions.forEach((item) => {
       add += `{path: "${item.path}",contents: "${encodeB64(item.content)}"},`;
     });
     add += "],";
   }
-  if (deletions.length) {
+  if (deletions?.length) {
     del = "deletions: [";
     deletions.forEach((item) => {
       del += `{path: "${item.path}"},`;
@@ -162,17 +162,19 @@ export function deleteList(
 ): Promise<boolean> {
   const commitInfo
     = dels.length === 1 ? `'${dels[0].id}'` : `${dels.length} items`;
-  const folder = getCurrentTab().url;
+  const folder = getCurrentTab();
   return createCommit(
     `Delete ${commitInfo} from ${folder}`,
-    [
-      {
-        path: `public/rebuild/json${folder}.json`,
-        content: JSON.stringify(newList)
-      }
-    ],
-    dels.map(item => ({
-      path: `public/rebuild${folder}/${item.id}.md`
-    }))
+    {
+      additions: [
+        {
+          path: `public/rebuild/json${folder}.json`,
+          content: JSON.stringify(newList)
+        }
+      ],
+      deletions: dels.map(item => ({
+        path: `public/rebuild${folder}/${item.id}.md`
+      }))
+    }
   );
 }

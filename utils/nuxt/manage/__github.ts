@@ -1,8 +1,7 @@
 import { translate } from "../i18n";
 import { getCurrentTab, devHotListen } from "../utils";
-import type { CommonItem } from "~/utils/common/types";
+import type { CommitParams, CommonItem } from "~/utils/common/types";
 import { notify } from "~/utils/nuxt/notify";
-import type { UpdateRebuild } from "~/vite-plugins/rebuild";
 import { rebuildEvent } from "~/vite-plugins/types";
 
 export function isAuthor(): never {
@@ -11,13 +10,12 @@ export function isAuthor(): never {
 
 export function createCommit(
   _commit = "",
-  additions: { path: string; content: string }[] = [],
-  deletions: { path: string }[] = []
+  { additions, deletions }: CommitParams
 ): Promise<boolean> {
   import.meta.hot!.send(rebuildEvent, {
     additions,
     deletions
-  } as UpdateRebuild);
+  });
   return listenServer();
 }
 
@@ -25,7 +23,7 @@ export function deleteList(
   newList: CommonItem[],
   dels: CommonItem[]
 ): Promise<boolean> {
-  const folder = getCurrentTab().url;
+  const folder = getCurrentTab();
   import.meta.hot!.send(rebuildEvent, {
     additions: [{
       path: `public/rebuild/json${folder}.json`,
@@ -34,7 +32,7 @@ export function deleteList(
     deletions: dels.map(item => ({
       path: `public/rebuild${folder}/${item.id}.md`
     }))
-  } as UpdateRebuild);
+  });
   return listenServer();
 }
 

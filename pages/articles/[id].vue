@@ -72,7 +72,7 @@ initViewer(root);
             {{ $t('menu') }}
           </h3>
           <nav class="space-y-1 text-sm">
-            <nuxt-link
+            <NuxtLink
               v-for="(anchor, idx) in menuItems"
               :key="idx"
               :to="`#${anchor.url}`"
@@ -84,23 +84,19 @@ initViewer(root);
               :title="anchor.text"
             >
               <span v-html="anchor.text" />
-            </nuxt-link>
+            </NuxtLink>
           </nav>
         </div>
       </aside>
 
-      <main class="order-1 flex-1 overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2 lg:order-2">
+      <main class="order-1 max-w-5xl flex-1 overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2 lg:order-2">
         <h1 class="mb-4 text-2xl font-medium text-dark-900 dark:text-white">
           {{ item.title }}
         </h1>
 
         <div class="mb-6 flex flex-wrap items-center gap-4 border-b border-dark-300 pb-3 text-sm text-dark-500 dark:border-dark-600 dark:text-dark-400">
-          <div class="flex items-center gap-1">
-            <WroteDate :item="item" />
-          </div>
-          <div class="flex items-center">
-            <Visitors :visitors="item._visitors" />
-          </div>
+          <WroteDate :item="item" />
+          <Visitors :visitors="item._visitors" />
           <div class="flex flex-wrap gap-2">
             <the-tag
               v-for="tag in item.tags"
@@ -127,14 +123,14 @@ initViewer(root);
               {{ $t('relativeArticles') }}
             </h3>
             <div class="max-h-40 space-y-4 overflow-auto">
-              <nuxt-link
+              <NuxtLink
                 v-for="{ item: i } in relativeArticles"
                 :key="i.id"
                 :to="`/articles/${i.id}`"
                 class="block rounded-md bg-dark-50 p-3 transition hover:bg-dark-100 dark:bg-dark-700 dark:hover:bg-dark-600"
               >
                 <h4 class="text-sm font-medium text-dark-700 dark:text-dark-300">{{ i.title }}</h4>
-              </nuxt-link>
+              </NuxtLink>
             </div>
           </div>
         </aside>
