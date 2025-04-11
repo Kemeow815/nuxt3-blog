@@ -14,7 +14,7 @@ import { isDev } from "~/utils/nuxt/constants";
 
 const inputTokenDisabled = isDev || __NB_BUILDTIME_VITESTING__;
 
-const pageLoading = useLoading();
+const loadingState = useLoadingState();
 
 const githubToken = useGithubToken();
 const encryptor = useEncryptor();
@@ -103,9 +103,9 @@ onMounted(() => {
 
 <template>
   <span
-    v-show="!!pageLoading.loadingState.value"
+    v-show="!!loadingState"
     class="fixed left-0 top-0 z-headerLoading h-0.5 bg-primary-500"
-    :style="{ width: `${pageLoading.loadingState.value}%` }"
+    :style="{ width: `${loadingState}%` }"
   />
 
   <div class="flex items-stretch">
@@ -126,16 +126,12 @@ onMounted(() => {
         <div class="flex items-center justify-between py-1 text-dark-500 dark:text-dark-300 md:justify-center">
           <button
             :class="twMerge(
-              'icon-button',
-              $style.themeMode,
-              themeMode === 'dark' && $style.modeDark
+              'icon-button'
             )"
             @click="toggleThemeMode"
           >
-            <span>
-              <MoonStar />
-              <Sun />
-            </span>
+            <MoonStar v-if="themeMode === 'light'" />
+            <Sun v-else />
           </button>
           <button
             :class="twMerge(
@@ -151,33 +147,33 @@ onMounted(() => {
           </button>
         </div>
         <div class="my-1 space-y-1 border-y border-dark-200 py-3 dark:border-dark-700">
-          <nuxt-link
+          <NuxtLink
             v-for="item in HeaderTabs"
-            :key="item.url"
-            :to="`/manage${item.url}`"
-            :class="twMerge($style.menuItem, activeRoute.startsWith(item.url) && $style.menuItemActive)"
+            :key="item"
+            :to="`/manage${item}`"
+            :class="twMerge($style.menuItem, activeRoute.startsWith(item) && $style.menuItemActive)"
           >
-            <component :is="IconMap[item.url]" />
-            {{ $t(item.name) }}
-          </nuxt-link>
-          <nuxt-link
+            <component :is="IconMap[item]" />
+            {{ $t(item) }}
+          </NuxtLink>
+          <NuxtLink
             to="/manage/config"
             :class="twMerge($style.menuItem, activeRoute.startsWith('/config') && $style.menuItemActive)"
           >
             <Settings />
             {{ $t('config') }}
-          </nuxt-link>
+          </NuxtLink>
         </div>
 
         <div class="pt-2">
           <div class="flex justify-between gap-4 px-2 py-4">
-            <nuxt-link
+            <NuxtLink
               :to="rocketUrl"
               :class="twMerge('anim-shake', $style.menuAction)"
               title="🚀"
             >
               <Rocket />
-            </nuxt-link>
+            </NuxtLink>
 
             <button
               :class="$style.menuAction"
@@ -206,7 +202,7 @@ onMounted(() => {
     </aside>
 
     <div class="min-h-screen flex-1 overflow-hidden">
-      <div class="mx-auto size-full max-w-[1440] rounded-lg p-4 *:rounded-lg *:bg-white *:shadow-md *:dark:bg-dark-800 max-md:p-1">
+      <div class="mx-auto size-full max-w-[1440px] rounded-lg p-4 *:rounded-lg *:bg-white *:shadow-md *:dark:bg-dark-800 max-md:p-1">
         <client-only>
           <slot />
         </client-only>
@@ -260,24 +256,6 @@ onMounted(() => {
 </template>
 
 <style module>
-.themeMode {
-  @apply overflow-hidden block p-1;
-
-  > span {
-    @apply flex flex-col size-5 items-center justify-around w-full h-[200%];
-  }
-}
-
-.themeAnimateToggle {
-  transition: all 0.2s cubic-bezier(0, -0.01, 0.23, 1.56);
-}
-
-.modeDark {
-  span {
-    transform: translateY(-50%);
-  }
-}
-
 .menuItem {
   @apply flex items-center rounded-md px-3 py-2.5 text-base font-medium text-dark-700 dark:text-dark-300;
 
@@ -291,7 +269,7 @@ onMounted(() => {
 }
 
 .menuAction {
-  @apply rounded-full flex items-center justify-center size-10 text-dark-500 dark:text-dark-300 bg-dark-50 dark:bg-dark-700 hover:bg-dark-100 hover:dark:bg-dark-800 hover:text-primary-600 dark:hover:text-primary-500;
+  @apply rounded-full flex items-center justify-center size-10 text-dark-500 dark:text-dark-300 bg-dark-50 dark:bg-dark-700 hover:bg-dark-100 hover:dark:bg-dark-900 hover:text-primary-600 dark:hover:text-primary-500;
 
   svg {
     @apply size-5;

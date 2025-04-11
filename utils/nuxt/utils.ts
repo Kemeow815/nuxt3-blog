@@ -1,11 +1,11 @@
 import type { WatchHandle, WatchOptions } from "vue";
 import { githubRepoUrl } from "../common/constants";
 import { HeaderTabs } from "../common/types";
-import { isDev, inBrowser } from "./constants";
+import { isDev } from "./constants";
 import config from "~/config";
 
 export function getCurrentTab() {
-  return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
+  return HeaderTabs.find(tab => useRoute().path.includes(tab)) || HeaderTabs[0];
 }
 
 export function useCommonSEOTitle(head: ComputedRef<string>, keys?: ComputedRef<string[]>) {
@@ -38,7 +38,7 @@ export function calcRocketUrl() {
   if (paths[0] === "about") {
     return githubRepoUrl;
   }
-  const item = HeaderTabs.find(tab => tab.url.substring(1) === paths[0]);
+  const item = HeaderTabs.find(tab => tab.substring(1) === paths[0]);
   if (item) {
     if (!paths[1] || paths[1] === "new") {
       return fromManage ? `/${paths[0]}` : `/manage/${paths[0]}`;
@@ -90,7 +90,7 @@ export function deepClone<T extends object>(item: T): T {
  * dev热更新
  */
 export function devHotListen<T>(event: string, callback: (_: T) => unknown) {
-  if (isDev && inBrowser) {
+  if (isDev && import.meta.client) {
     const listener = (e: Event) => {
       callback((e as CustomEvent<T>).detail);
       window.removeEventListener(event, listener);

@@ -1,17 +1,18 @@
 <script setup lang="tsx">
-import { Languages, Sun, MoonStar, Rocket, Menu, Rss, Key } from "lucide-vue-next";
+import { Languages, Sun, MoonStar, Rocket, Menu, Rss, Key, Search } from "lucide-vue-next";
 import Headroom from "headroom.js";
 import tailwindConfig from "#tailwind-config";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
 import config from "~/config";
 import { i18nLocales, type I18nCode } from "~/utils/common/locales";
 import { HeaderTabs } from "~/utils/common/types";
-import { translate } from "~/utils/nuxt/i18n";
 import { calcRocketUrl } from "~/utils/nuxt/utils";
+
+const algoliaEnabled = __NB_ALGOLIA_ENABLED__;
 
 const { i18nCode, changeI18n } = useI18nCode();
 const { themeMode, toggleThemeMode } = useThemeMode();
-const pageLoading = useLoading();
+const loadingState = useLoadingState();
 
 const route = useRoute();
 const mobileMenuShow = ref(false);
@@ -72,28 +73,40 @@ const inputPwd = ref(encryptor.usePasswd.value);
       :class="$style.nav"
     >
       <div class="container mx-auto flex h-header items-center justify-between px-4 max-md:px-2 lg:px-8">
-        <nuxt-link
-          class="shrink-0 text-lg font-medium text-primary-700 drop-shadow hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-500"
+        <NuxtLink
+          class="group shrink-0"
           to="/about"
         >
-          <span>{{ config.nickName }}</span>
-        </nuxt-link>
+          <span class="hidden pr-1 text-sm group-hover:inline">{{ $t('about') }}</span>
+          <span class="text-xl font-medium text-primary-700 drop-shadow hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-500">{{ config.nickName }}</span>
+        </NuxtLink>
         <div :class="$style.pcMenu">
-          <nuxt-link
+          <NuxtLink
             v-for="item in HeaderTabs"
-            :key="item.url"
-            :to="item.url"
+            :key="item"
+            :to="item"
           >
-            {{ translate(item.name) }}
-          </nuxt-link>
+            {{ $t(item) }}
+          </NuxtLink>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 max-md:gap-2">
+          <NuxtLink
+            v-if="algoliaEnabled"
+            class="icon-button max-md:hidden"
+            :title="$t('search-all')"
+            to="/search"
+          >
+            <Search />
+          </NuxtLink>
           <button
-            :class="twMerge('icon-button', $style.i18n)"
+            class="icon-button relative !overflow-visible"
             @click="showI18n = true"
           >
             <Languages />
-            <common-dropdown v-model:show="showI18n">
+            <common-dropdown
+              v-model:show="showI18n"
+              wrap-class="mt-2"
+            >
               <div>
                 <client-only>
                   <div
@@ -121,18 +134,18 @@ const inputPwd = ref(encryptor.usePasswd.value);
             @click="toggleTheme"
           >
             <span :class="themeAnimate && $style.themeAnimateToggle">
-              <MoonStar />
-              <Sun />
+              <MoonStar class="size-5" />
+              <Sun class="size-5" />
             </span>
           </button>
           <div :class="$style.goManage">
-            <nuxt-link
+            <NuxtLink
               :to="rocketUrl"
               title="🚀"
               class="icon-button anim-shake"
             >
               <Rocket />
-            </nuxt-link>
+            </NuxtLink>
             <div
               :class="twMerge($style.pwd, encryptor.passwdCorrect.value && $style.pwdValid)"
               :title="$t('passwd')"
@@ -156,19 +169,27 @@ const inputPwd = ref(encryptor.usePasswd.value);
         v-show="mobileMenuShow"
         :class="$style.mobileMenu"
       >
-        <nuxt-link
+        <NuxtLink
           v-for="item in HeaderTabs"
-          :key="item.url"
-          :to="item.url"
+          :key="item"
+          :to="item"
         >
-          {{ translate(item.name) }}
-        </nuxt-link>
+          {{ $t(item) }}
+        </NuxtLink>
+        <NuxtLink
+          v-if="algoliaEnabled"
+          class="icon-button !w-full"
+          :title="$t('search-all')"
+          to="/search"
+        >
+          <Search />
+        </NuxtLink>
       </div>
     </nav>
     <span
-      v-show="!!pageLoading.loadingState.value"
+      v-show="!!loadingState"
       class="fixed left-0 top-0 z-headerLoading h-0.5 bg-primary-500"
-      :style="{ width: `${pageLoading.loadingState.value}%` }"
+      :style="{ width: `${loadingState}%` }"
     />
     <section class="z-body min-h-[calc(100vh_-_64px)] pt-header">
       <slot />
@@ -272,7 +293,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
   @apply flex max-md:hidden gap-10;
 
   a {
-    @apply -mb-[4px] font-medium flex flex-col items-center gap-[3px] text-lg text-dark-800 dark:text-dark-200 hover:text-primary-700 dark:hover:text-primary-400 after:block after:h-[1.5px] after:w-[120%] after:bg-transparent after:transition hover:after:bg-primary-700;
+    @apply -mb-[4px] font-medium flex flex-col items-center gap-[3px] text-lg text-dark-800 dark:text-dark-200 hover:text-primary-700 dark:hover:text-primary-400 after:block after:h-[2px] after:w-[120%] after:bg-transparent after:transition hover:after:bg-primary-700;
   }
 }
 

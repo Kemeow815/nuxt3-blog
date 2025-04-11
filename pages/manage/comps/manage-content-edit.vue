@@ -71,6 +71,12 @@ const getUploadInfo = async () => {
   }
   // 需要clone一份item，clone的item仅用于上传
   const newItem = deepClone(editingItem.value) as T;
+  for (const key of Object.keys(newItem)) {
+    if (key.startsWith("_")) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete newItem[key as keyof T];
+    }
+  }
   let mdContent = escapeNewLine(editingMd.value);
   // 处理item
   if (props.processWithContent) {
@@ -84,7 +90,7 @@ const getUploadInfo = async () => {
         title: translate("need-passwd")
       });
     }
-    await encryptDecryptItem(newItem, encryptor.encrypt, targetTab.url);
+    await encryptDecryptItem(newItem, encryptor.encrypt, targetTab);
     mdContent = await encryptor.encrypt(mdContent);
     // 整篇加密的markdown，不会再有加密块
     delete newItem.encryptBlocks;
@@ -113,9 +119,7 @@ const getUploadInfo = async () => {
   newItem.modifyTime = nowTime;
   return {
     item: {
-      ...newItem,
-      _show: undefined,
-      _visitors: undefined
+      ...newItem
     },
     md: mdContent
   };
@@ -147,16 +151,18 @@ const doUpload = async () => {
   currentOperate.value = "upload";
   toggleProcessing();
   try {
-    const success = await createCommit(`Update ${targetTab.name}-${newItem.id}`, [
-      {
-        path: `public/rebuild/json${targetTab.url}.json`,
-        content: JSON.stringify(editItem(originList, newItem))
-      },
-      {
-        path: `public/rebuild${targetTab.url}/${newItem.id}.md`,
-        content: md
-      }
-    ]);
+    const success = await createCommit(`Update ${targetTab.replace("/", "")}-${newItem.id}`, {
+      additions: [
+        {
+          path: `public/rebuild/json${targetTab}.json`,
+          content: JSON.stringify(editItem(originList, newItem))
+        },
+        {
+          path: `public/rebuild${targetTab}/${newItem.id}.md`,
+          content: md
+        }
+      ]
+    });
     if (success) {
       useUnsavedContent().value = false;
     }
