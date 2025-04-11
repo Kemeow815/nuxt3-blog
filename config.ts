@@ -20,9 +20,9 @@ export default {
     visitFromOwner: false // 网站拥有者访问时，是否增加浏览量
   },
   algoliaSearch: { // 参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.5-%E5%85%A8%E7%AB%99%E6%90%9C%E7%B4%A2
-    appId: "",
-    searchKey: "",
-    indexName: ""
+    appId: "952EAZZ0YD",
+    searchKey: "265306439f4b0cf95824ba9bfbe674f0",
+    indexName: "nuxt3-blog"
   },
   themeColor: ["cyan", "sky", "teal", "emerald", "purple", "indigo", "fuchsia", "orange", "amber"], // 主题色，如果有多个颜色，则随机使用，参考 https://tailwindcss.com/docs/colors
   themeColorDark: "neutral", // 主题色(夜间模式)
